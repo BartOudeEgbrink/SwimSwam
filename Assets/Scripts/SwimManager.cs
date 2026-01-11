@@ -15,7 +15,7 @@ public class SwimManager : MonoBehaviour
     private float lastStrokeTime;
     private bool firstStroke;
 
-    public float strokeDistance;
+    public float strokeDistance = 1f;
 
     private bool expectA = true;
     private SwimState state = SwimState.SwimmingForward;
@@ -79,7 +79,7 @@ public class SwimManager : MonoBehaviour
         float statBonus = StatsSO.Strength * 0.05f;
         float totalDistance = (baseDistance + statBonus) * efficiency;
 
-        distance += strokeDistance;
+        distance += totalDistance;
 
         if (distance >= laneLength)
         {
