@@ -75,9 +75,8 @@ public class SwimManager : MonoBehaviour
         lastStrokeTime = Time.time;
         firstStroke = true;
 
-        float baseDistance = strokeDistance;
         float statBonus = StatsSO.Strength * 0.05f;
-        float totalDistance = (baseDistance + statBonus) * efficiency;
+        float totalDistance = (strokeDistance + statBonus) * efficiency;
 
         distance += totalDistance;
 
