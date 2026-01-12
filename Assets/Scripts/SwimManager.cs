@@ -18,6 +18,7 @@ public class SwimManager : MonoBehaviour
     public float strokeDistance = 1f;
 
     private bool expectA = true;
+    private bool evenLane = true;
     private SwimState state = SwimState.SwimmingForward;
     
     public enum SwimState
@@ -78,14 +79,31 @@ public class SwimManager : MonoBehaviour
         float statBonus = StatsSO.Strength * 0.05f;
         float totalDistance = (strokeDistance + statBonus) * efficiency;
 
-        distance += totalDistance;
+        if (evenLane)
+        {
+            distance += totalDistance;
+        } else
+        {
+            distance -= totalDistance;
+        }
+
 
         if (distance >= laneLength)
         {
+            distance = laneLength;
             state = SwimState.Turning;
             Debug.Log("Reached the Wall, Press Space to Turn");
             return;
         }
+
+        if (distance < 0f)
+        {
+            distance = 0f;
+            state = SwimState.Turning;
+            Debug.Log("Reached the Wall, Press Space to Turn");
+            return;
+        }
+
 
         Debug.Log("Distance: " + distance);
     }
@@ -108,9 +126,10 @@ public class SwimManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            distance = 0f;
+            // distance = 0f;
             state = SwimState.SwimmingForward;
             expectA = true;
+            evenLane = !evenLane;
 
             Debug.Log("Turn Sucessfull");
         }
