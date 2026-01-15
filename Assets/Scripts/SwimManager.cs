@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SwimManager : MonoBehaviour
 {
+    public TimingRingController timingRing;
     [SerializeField]
     private IntSO StatsSO;
 
@@ -68,7 +69,7 @@ public class SwimManager : MonoBehaviour
         if (firstStroke)
         {
             float timeSinceLastStroke = Time.time - lastStrokeTime;
-            efficiency = CalculateTimingEfficiency(timeSinceLastStroke);
+            efficiency = timingRing.GetTimingMultiplier();
 
             Debug.Log($"Timing: {timeSinceLastStroke:F2}s | Efficiency: {efficiency:F2}");
         }
@@ -108,19 +109,19 @@ public class SwimManager : MonoBehaviour
         Debug.Log("Distance: " + distance);
     }
 
-    private float CalculateTimingEfficiency(float time)
-    {
-        if (time < idealMinTime)
-        {
-            return 0.6f; // Too Fast
-        }
-        if (time > idealMaxTime)
-        {
-            return 0.8f; // Too slow
-        }
+    //private float CalculateTimingEfficiency(float time)
+    //{
+    //    if (time < idealMinTime)
+    //    {
+    //        return 0.6f; // Too Fast
+    //    }
+    //    if (time > idealMaxTime)
+    //    {
+    //        return 0.8f; // Too slow
+    //    }
 
-        return 1.2f;
-    }
+    //    return 1.2f;
+    //}
 
     private void HandleTurn()
     {
