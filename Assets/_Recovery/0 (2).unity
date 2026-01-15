@@ -490,7 +490,7 @@ MonoBehaviour:
   currentSpeed: 2
   maxSpeed: 4
   minSpeed: 0
-  speedRecoveryRate: 0.5
+  speedRecoveryRate: 2
   strokeDistance: 1
 --- !u!4 &923454077
 Transform:

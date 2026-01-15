@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public class SwimManager : MonoBehaviour
@@ -10,11 +10,12 @@ public class SwimManager : MonoBehaviour
     public float distance = 0f;
     public float laneLength = 25f;
 
-    public float idealMinTime = 0.25f;
-    public float idealMaxTime = 0.6f;
+    public float baseSpeed = 2f;
+    public float currentSpeed = 2f;
+    public float maxSpeed = 4f;
+    public float minSpeed = 0f;
 
-    private float lastStrokeTime;
-    private bool firstStroke;
+    public float speedRecoveryRate = 0.5f; // how fast it returns to base
 
     public float strokeDistance = 1f;
 
@@ -39,12 +40,36 @@ public class SwimManager : MonoBehaviour
         switch (state)
         {
             case SwimState.SwimmingForward:
+                MoveSwimmer();
                 HandleSwimming();
                 break;
 
             case SwimState.Turning:
                 HandleTurn();
                 break;
+        }
+    }
+
+    private void MoveSwimmer()
+    {
+        currentSpeed = Mathf.MoveTowards(
+            currentSpeed,
+            baseSpeed,
+            speedRecoveryRate * Time.deltaTime
+        );
+
+        float direction = evenLane ? 1f : -1f;
+        distance += currentSpeed * direction * Time.deltaTime;
+
+        if (distance >= laneLength)
+        {
+            distance = laneLength;
+            state = SwimState.Turning;
+        }
+        else if (distance <= 0f)
+        {
+            distance = 0f;
+            state = SwimState.Turning;
         }
     }
 
@@ -64,64 +89,21 @@ public class SwimManager : MonoBehaviour
 
     private void Stroke()
     {
-        float efficiency = 1f;
+        float efficiency = timingRing.GetTimingMultiplier();
 
-        if (firstStroke)
+        if (efficiency <= 0f)
         {
-            float timeSinceLastStroke = Time.time - lastStrokeTime;
-            efficiency = timingRing.GetTimingMultiplier();
-
-            Debug.Log($"Timing: {timeSinceLastStroke:F2}s | Efficiency: {efficiency:F2}");
-        }
-
-        lastStrokeTime = Time.time;
-        firstStroke = true;
-
-        float statBonus = StatsSO.Strength * 0.05f;
-        float totalDistance = (strokeDistance + statBonus) * efficiency;
-
-        if (evenLane)
-        {
-            distance += totalDistance;
-        } else
-        {
-            distance -= totalDistance;
-        }
-
-
-        if (distance >= laneLength)
-        {
-            distance = laneLength;
-            state = SwimState.Turning;
-            Debug.Log("Reached the Wall, Press Space to Turn");
+            // Missed stroke → maybe slow down or stall
+            currentSpeed = 0;
+            Debug.Log($"Stroke efficiency: {efficiency}, Speed: {currentSpeed}");
             return;
         }
 
-        if (distance < 0f)
-        {
-            distance = 0f;
-            state = SwimState.Turning;
-            Debug.Log("Reached the Wall, Press Space to Turn");
-            return;
-        }
+        currentSpeed += efficiency;
+        currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
 
-
-        Debug.Log("Distance: " + distance);
+        Debug.Log($"Stroke efficiency: {efficiency}, Speed: {currentSpeed}");
     }
-
-    //private float CalculateTimingEfficiency(float time)
-    //{
-    //    if (time < idealMinTime)
-    //    {
-    //        return 0.6f; // Too Fast
-    //    }
-    //    if (time > idealMaxTime)
-    //    {
-    //        return 0.8f; // Too slow
-    //    }
-
-    //    return 1.2f;
-    //}
 
     private void HandleTurn()
     {
