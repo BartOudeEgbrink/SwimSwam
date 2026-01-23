@@ -17,8 +17,8 @@ Sadly, at the point of writing the game is not fully completed and ready for rel
 
 ## Screenshots
 
-![image](readmeImages/Screenshot 2026-01-23 094611.png)
-![image](readmeImages/Screenshot 2026-01-23 095120.png)
+![image](readmeImages/Pool.png)
+![image](readmeImages/Stats.png)
 ![Swimmer](readmeImages/Swimmer.gif)
 ![WaveAnimation-export](readmeImages/WaveAnimation-export.gif)
 
