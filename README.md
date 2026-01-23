@@ -17,10 +17,10 @@ Sadly, at the point of writing the game is not fully completed and ready for rel
 
 ## Screenshots
 
-![image](https://hackmd.io/_uploads/HyrwrhxIZg.png)
-![image](https://hackmd.io/_uploads/HkUcLhxIWl.png)
-![Swimmer](https://hackmd.io/_uploads/ryKK_hxUWe.gif)
-![TimingRing](https://hackmd.io/_uploads/HJNidhxL-g.gif)
+![image](readmeImages/Screenshot 2026-01-23 094611.png)
+![image](readmeImages/Screenshot 2026-01-23 095120.png)
+![Swimmer](readmeImages/Swimmer.gif)
+![WaveAnimation-export](readmeImages/WaveAnimation-export.gif)
 
 
 ## What I learned
